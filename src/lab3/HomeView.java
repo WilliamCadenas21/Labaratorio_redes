@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 import javax.swing.JFileChooser;
 
@@ -16,6 +17,7 @@ public class HomeView extends javax.swing.JFrame {
     /**
      * Creates new form HomeView
      */
+    Scanner sc = new Scanner(System.in);
     public HomeView() {
         initComponents();
     }
@@ -43,8 +45,18 @@ public class HomeView extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Exportar Archivo");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         LabelRutaFile.setText("jLabel1");
 
@@ -89,37 +101,37 @@ public class HomeView extends javax.swing.JFrame {
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         JFileChooser jf = new JFileChooser();
         int aa=jf.showOpenDialog(null);
-        //System.out.println(aa);
         if(aa==JFileChooser.APPROVE_OPTION){
             FileReader fff=null;
             try{
                 char cbuf[]=null;
+                
+                String out="|",pol="";
                 ff=jf.getSelectedFile();
-                LabelRutaFile.setText(ff.getAbsolutePath());
-                System.out.println(ff);
                 fff=new FileReader(ff);
                 LabelText.read(fff,"");
-                try(FileReader f = new FileReader(ff.getAbsolutePath())){
-                    BufferedReader b = new BufferedReader(f);
-                    String cadena;
-                    while((cadena = b.readLine())!=null) {
-                        StringTokenizer st = new StringTokenizer(cadena," ");
-                        while(st.hasMoreElements()){
-                            String token=st.nextElement().toString();
-                            System.out.println(token);
-                            }
-                        }
-                    b.close();
-                } catch (IOException ex) {
-                    //       Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                System.out.println("Digite el polinomio");
+                pol=sc.nextLine();
+                System.out.println("Nombre del output");
+                out=sc.nextLine();
+                Detect errors= new Detect(ff,out,pol);
+                errors.send();
+                
             }catch(Exception ex){
                 System.out.println(ex);
             }
-            
+
         }
-        
+
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -128,7 +140,7 @@ public class HomeView extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
