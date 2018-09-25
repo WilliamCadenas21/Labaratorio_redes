@@ -88,7 +88,6 @@ public class HomeView extends javax.swing.JFrame {
     File ff;
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         JFileChooser jf = new JFileChooser();
-        
         int aa=jf.showOpenDialog(null);
         //System.out.println(aa);
         if(aa==JFileChooser.APPROVE_OPTION){
@@ -112,13 +111,14 @@ public class HomeView extends javax.swing.JFrame {
                         }
                     b.close();
                 } catch (IOException ex) {
-    //       Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
+                    //       Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }catch(Exception ex){
                 System.out.println(ex);
             }
             
         }
+        
     }//GEN-LAST:event_jButton1MouseClicked
 
     /**

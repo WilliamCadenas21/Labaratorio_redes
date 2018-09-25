@@ -11,7 +11,12 @@ public class Lab3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-  
+        HomeView v1 = new HomeView();
+        v1.setLocationRelativeTo(null);
+        v1.setVisible(true);
+        System.out.print(Integer.toString((int)'5', 2));    
+        System.out.print(Integer.toString((int)'B', 2));    
     }
+    
     
 }
