@@ -57,7 +57,8 @@ archivo de chequeo .ham y se correge de acuerdo con el método Hamming en el rec
 originando un archivo de salida que debe ser idéntico al archivo de entrada original.
 Nota: El programa debe ser muy personalizado.
 #### :eyes: Detección :eyes:
-**Emisor:** Debe tomar como entrada un archivo de texto y codificarlo según lo explicado
+**Emisor:** Debe tomar como entrada un archivo de texto y codificarlo según lo explicado.
+
 **Receptor:** Debe tomar como entrada un archivo de texto de otro grupo y decodificarlo para detectar errores según lo explicado.
 #### :white_check_mark: Corrección :white_check_mark:
 **Emisor:** Debe tomar como entrada un archivo de texto y codificarlo según lo explicado.
