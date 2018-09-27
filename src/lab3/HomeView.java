@@ -106,17 +106,18 @@ public class HomeView extends javax.swing.JFrame {
             try{
                 char cbuf[]=null;
                 
-                String out="|",pol="";
+                String out="",pol="";
                 ff=jf.getSelectedFile();
                 fff=new FileReader(ff);
                 LabelText.read(fff,"");
-                System.out.println("Digite el polinomio");
+                /*System.out.println("Digite el polinomio");
                 pol=sc.nextLine();
                 System.out.println("Nombre del output");
                 out=sc.nextLine();
+                */
                 Detect errors= new Detect(ff,out,pol);
-                errors.send();
-                
+                //errors.send();
+                errors.reception();
             }catch(Exception ex){
                 System.out.println(ex);
             }
