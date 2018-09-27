@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -51,12 +50,8 @@ public class Detect {
             String pol= br.readLine();
             System.out.println(pol);
             while ((codeword = br.readLine()) != null) {
-                if (!(new BigInteger(codeword,2).mod(new BigInteger(pol,2))).toString(2).equals("0")){
-                    correct=false;
-                    System.out.println(codeword);
-                }
-                
-                datawords+=codeword.substring(0, codeword.length()-pol.length()+1)+"\n";
+                if (!module(codeword).equals("000"))correct=false;
+                datawords+=codeword.substring(0, codeword.length()-pol.length()+1)+"\n";   
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,47 +67,99 @@ public class Detect {
         
         if(correct){
             System.out.println("Correcto");
+            String route=file.getAbsolutePath().replace(".crc", ".txt");
+            try {
+                cre_file(route,datawords);
+            } catch (IOException ex) {
+                Logger.getLogger(Detect.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else{
             System.out.println("incorrecto");
         }
     }
+    
+    /**
+     * this function return the module
+     * of binary % pol
+     * @param binary binary number
+     */
+    private String module(String binary) {
+        String poly=this.pol,mod=binary.substring(0, poly.length());
+        int indx=poly.length();
+        while(indx<binary.length()){
+            if(mod.charAt(0)=='1'){
+                String temp="";
+                for (int i = 0; i <poly.length() ; i++) {
+                    if(mod.charAt(i)!=poly.charAt(i))temp+='1';
+                    else temp+='0';
+                }
+                mod=temp;
+            }
+            mod=mod.substring(1, mod.length())+binary.charAt(indx);
+            indx++;
+        }
+        return mod.substring(1);
+    }
 
     /**
-     *
+     *this function creates the file
+     * which contains the codewords
+     * in first place calculate the numbers of 
+     * blocks and verify if there is a block
+     * without 16 characters, after we create the zeros who 
+     * will be add to the dataword and we transform the 
+     * block to binary,and create all the codewords
+     * finally we create the crc file.
      */
     public void send() {
-        String msg = this.msg, bmsg = "";
-
-        int sz = msg.length() / 16;
+        String codewords = this.msg, bmsg = "";
+        int sz = codewords.length() / 16;
         boolean extra = false;
-        if (msg.length() % 16 != 0) {
+        if (codewords.length() % 16 != 0) {
             extra = true;
         }
+        String zeros = "";
+        for (int i = 0; i < pol.length() - 1; i++) {
+            zeros += 0;
+        }
+        String dataword="";
         int i = 0;
         while (i < sz) {
             i++;
-            bmsg += codeword(binBlock(msg.substring(16 * (i - 1), 16 * i))) + "\n";
+            dataword=binBlock(codewords.substring(16 * (i - 1), 16 * i));
+            bmsg += dataword+module(dataword+zeros) + "\n";
         }
         if (extra) {
-            bmsg += codeword(binBlock(msg.substring(16 * (i - 1), 16 * i))) + "\n";
+            dataword=binBlock(codewords.substring(16 * (i - 1), 16 * i));
+            bmsg += dataword+module(dataword+zeros) + "\n";
         }
-
-        String temp[] = file.getAbsolutePath().split(Pattern.quote("\\")), route = "";
-        i = 0;
-        while (i < temp.length - 1) {
-            route += temp[i] + "\\\\";
-            i++;
-        }
-        route += outname;
-        try {
-            cre_send(route, bmsg);
+       String route=getroute()+outname+".crc";
+       try {
+            cre_file(route, bmsg);
             JOptionPane.showMessageDialog(null, "Archivo creado");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error en la creacion del archivo");
         }
     }
-
-    private void cre_send(String route, String bin_msg) throws IOException {
+    /**
+     
+     */
+    private String getroute(){
+     String temp[] = file.getAbsolutePath().split(Pattern.quote("\\")), route = "";
+        int i = 0;
+        while (i < temp.length - 1) {
+            route += temp[i] + "\\\\";
+            i++;
+        }
+        return route;
+    }
+    /**
+     * get the path and the message 
+     * to create a file
+     * @param route path
+     * @param bin_msg message
+     */
+    private void cre_file(String route, String bin_msg) throws IOException {
         FileWriter fw = null;
         try {
             File archivo = new File(route);
@@ -133,20 +180,6 @@ public class Detect {
         }
     }
 
-    private String codeword(String binary) {
-        String extra = "";
-        for (int i = 0; i < pol.length() - 1; i++) {
-            extra += 0;
-        }
-
-        BigInteger a = new BigInteger(binary + extra, 2), b = new BigInteger(pol, 2);
-        String result = a.mod(b).toString(2);
-
-        for (int i = result.length(); i < pol.length() - 1; i++) {
-            result = '0' + result;
-        }
-        return binary + result;
-    }
 
     /**
      * get a char and return string with the binary of character.The string has

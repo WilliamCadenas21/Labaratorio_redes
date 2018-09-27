@@ -114,9 +114,11 @@ public class HomeView extends javax.swing.JFrame {
                 pol=sc.nextLine();
                 System.out.println("Nombre del output");
                 out=sc.nextLine();
-                */
+                
                 Detect errors= new Detect(ff,out,pol);
                 //errors.send();
+                */
+                Detect errors= new Detect(ff,out,"1011");
                 errors.reception();
             }catch(Exception ex){
                 System.out.println(ex);
